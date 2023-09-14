@@ -1,9 +1,22 @@
-import React from 'react'
+import React, { useState } from "react";
 
 const Login = () => {
-  return (
-    <div>Login</div>
-  )
-}
 
-export default Login
+  return (
+    <div className="formContainer">
+      <div className="formWrapper">
+        <span className="logo">Lama Chat</span>
+        <span className="title">Login</span>
+        <form>
+          <input type="email" placeholder="Email" />
+          <input type="password" placeholder="Password" />
+          <button>Sign in</button>
+        </form>
+        <p>You don't have an account? Register</p>
+        {/* <p>You don't have an account? <Link to="/register">Register</Link></p> */}
+      </div>
+    </div>
+  );
+};
+
+export default Login;
