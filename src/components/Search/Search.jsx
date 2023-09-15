@@ -21,8 +21,7 @@ const Search = () => {
       querySnapshot.forEach((doc) => {
         setUser(doc.data())
       });
-
-      console.log(getDocs(q));
+      
     } catch (error) {
       setError(true);
     }
@@ -64,9 +63,7 @@ const Search = () => {
           [combineId + ".date"]: serverTimestamp()
         });
       } 
-    } catch (error) { 
-      setError(true)
-    }
+    } catch (error) { }
 
     setUser(null);
     setUsername(""); 
