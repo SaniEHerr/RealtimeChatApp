@@ -8,6 +8,7 @@ import { db } from "../../firebase";
 const Chats = () => {
 
   const [chats, setChats] = useState([]);
+  const [selectedUser, setSelectedUser] = useState(null); // Nuevo estado para el usuario seleccionado
 
   const { currentUser } = useContext(AuthContext)
   const { dispatch } = useContext(ChatContext)
@@ -29,6 +30,7 @@ const Chats = () => {
 
   const handleSelect = (user) => {
     dispatch({ type: "CHANGE_USER", payload: user })
+    setSelectedUser(user); // Establece el usuario seleccionado cuando se hace clic en un userChat
   }
 
   return (
@@ -36,9 +38,9 @@ const Chats = () => {
       {
         Object.entries(chats)?.sort((a, b) => b[1].date - a[1].date).map((chat) => (
           <div 
-              className="userChat" 
-              key={chat[0]} onClick={() => 
-              handleSelect(chat[1].userInfo)}
+            className={`userChat ${selectedUser === chat[1].userInfo ? 'selected' : ''}`}
+            key={chat[0]} 
+            onClick={() => handleSelect(chat[1].userInfo)}
           >
             <img src={chat[1].userInfo.photoURL} alt="user image" />
             <div className="userChatInfo">

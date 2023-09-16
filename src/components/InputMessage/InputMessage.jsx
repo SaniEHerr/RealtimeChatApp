@@ -17,6 +17,20 @@ const InputMessage = () => {
   const { data } = useContext(ChatContext);
 
   const handleSend = async () => {
+    // Eliminar espacios en blanco al principio y al final del texto
+    const trimmedText = text.trim();
+
+    if (!trimmedText && !image) {
+      // Si el texto está vacío después de eliminar espacios en blanco
+      // y no hay imagen, no hagas nada.
+      return;
+    }
+
+    if (!text && !image) {
+      // No hay texto ni imagen para enviar, no hagas nada.
+      return;
+    }
+
     if (image) {
       const storageRef = ref(storage, uuid());
       const uploadTask = uploadBytesResumable(storageRef, image);
@@ -35,7 +49,7 @@ const InputMessage = () => {
             await updateDoc(doc(db, "chats", data.chatId), {
               messages: arrayUnion({
                 id: uuid(),
-                text,
+                text: text || null, // Use null if text is empty
                 senderId: currentUser.uid,
                 date: Timestamp.now(),
                 image: downloadURL
@@ -76,7 +90,7 @@ const InputMessage = () => {
     setText("");
     setImage(null);
   }
-
+  
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
       e.preventDefault();
