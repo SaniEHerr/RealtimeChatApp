@@ -3,7 +3,7 @@ import AddAvatar from '../../img/addAvatar.png'
 import { createUserWithEmailAndPassword, updateProfile } from "firebase/auth";
 import { auth, db, storage } from "../../firebase"
 import { ref, uploadBytesResumable, getDownloadURL } from "firebase/storage";
-import { doc, setDoc } from "firebase/firestore"; 
+import { doc, serverTimestamp, setDoc } from "firebase/firestore"; 
 import { Link, useNavigate } from 'react-router-dom';
 
 const Register = () => {
@@ -48,6 +48,8 @@ const Register = () => {
               displayName, 
               email,
               photoURL: downloadURL,
+              isOnline: true,
+              lastOnline: serverTimestamp()
             });
   
             // Create empty user chats on Firestore
