@@ -793,7 +793,7 @@ const InputMessage = () => {
     setIsRecordingCompleted(false);
     setIsTyping(false); // Cuando se envía el mensaje, el usuario no está escribiendo
     setIsAudioRecordingCancelled(false);
-    // setShowFunctionsContainer(true);
+    // setShowFunctionsContainer(true); 
   };
   
   const pasteImage = async () => {
