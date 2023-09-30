@@ -17,7 +17,7 @@ const Navbar = () => {
       });
 
       // Realiza el cierre de sesión
-      signOut(auth);
+      await signOut(auth);
     } catch (error) {
       console.error("Error updating online status:", error);
     }
