@@ -195,6 +195,7 @@
             width: 40px;
             border-radius: 50%;
             object-fit: cover;
+
           }
         }
 
@@ -507,9 +508,9 @@
               .documentContainer {
                 display: flex;
                 flex-direction: column;
-                gap: .5rem;
+                gap: .2rem;
                 width: 100%;
-                margin-bottom: .5rem;
+                margin-bottom: .8rem;
               }
 
               .messageDocument {
@@ -532,19 +533,19 @@
             img {
               max-width: 100%;
               margin-bottom: .5rem;
+              border-radius: .3rem;
             }
 
             .customAudioPlayer {
               // width: 310px;
               width: 200px;
               display: flex;
-              flex-direction: row;
+              flex-direction: row-reverse;
               align-items: center;
               justify-content: center;
               margin-top: 15px;
-              gap: .7rem;
+              gap: 0.7rem;
               margin-right: 20px; 
-              // margin-left: 6px;
 
               p {
                 margin-bottom: 4px;
@@ -576,6 +577,19 @@
             button {
               background-color: #8DA4F1;
               color: white;
+              margin-bottom: 0.1rem;
+            }
+
+            .reformContainer {
+              display: flex;
+              flex-direction: row;
+              align-items: center;
+              justify-content: center;
+              gap: 0.7rem;
+            }
+
+            .messageTextContainer {
+              width: 100%;
             }
           }
 
@@ -617,6 +631,7 @@
                 .messageTextContainer {
                   width: 100%;
                 }
+                
                 .messageText {
                   font-size: 16px;
                   margin-right: 10px;
@@ -637,6 +652,20 @@
               button {
                 background-color: white;
                 color: black;
+                margin-bottom: 0.3rem;
+              }
+
+              .reformContainer {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: center;
+                gap: 0.7rem;
+              }
+
+              .customAudioPlayer {
+                flex-direction: row;
+                gap: .7rem;
               }
             }
           }

@@ -560,26 +560,32 @@ import { Icon } from '@iconify/react';
             {message.audio && (
               <div className="customAudioPlayer">
                 <audio ref={audioRef} src={message.audio} preload="metadata"></audio>
+
                 <div className="audioSpeedControl">
                   <button onClick={togglePlaybackRate}>
                     {playbackRates[currentPlaybackRateIndex]}
                   </button>
                 </div>
-                <div
-                  className="playPauseButtonContainer"
-                  onClick={togglePlayPause}
-                >
-                  {isPlaying ? <Icon icon="ic:sharp-pause" width={34} /> : <Icon icon="bi:play-fill" width={34} />}
-                </div>
-        
-                <div className="audio-duration">
-                {showAudioDuration ? (
-                  <p>
-                    {formatTime(currentTime)} / {formatTime(audioDuration)}
-                  </p>
-                ) : (
-                  <p>{formatTime(currentTime)}</p>
-                )}
+                
+                <div className="reformContainer">
+                  
+                  <div
+                    className="playPauseButtonContainer"
+                    onClick={togglePlayPause}
+                  >
+                    {isPlaying ? <Icon icon="ic:sharp-pause" width={34} /> : <Icon icon="bi:play-fill" width={34} />}
+                  </div>
+
+                  <div className="audio-duration">
+                  {showAudioDuration ? (
+                    <p>
+                      {formatTime(currentTime)} / {formatTime(audioDuration)}
+                    </p>
+                  ) : (
+                    <p>{formatTime(currentTime)}</p>
+                  )}
+                  </div>
+
                 </div>
 
               </div>
