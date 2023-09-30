@@ -549,6 +549,7 @@ const InputMessage = () => {
   
       recorder.start();
   
+      setIsRecordingCompleted(false);
       setIsRecording(true); // Cambia a modo de grabación de audio
       setIsAudioRecording(true); // Establecer isAudioRecording en true
       // setAudioRecordingText("Grabando...");
@@ -562,7 +563,7 @@ const InputMessage = () => {
     if (mediaRecorder) {
       mediaRecorder.stop();
       setIsCancellingAudio(true); // Indicar que se está cancelando la grabación de audio
-      setAudioRecordingText("Grabacion finalizada"); // Cambiar el texto cuando se detiene la grabación
+      // setAudioRecordingText("Grabacion finalizada"); // Cambiar el texto cuando se detiene la grabación
     }
   };
 
@@ -793,7 +794,7 @@ const InputMessage = () => {
     setIsRecordingCompleted(false);
     setIsTyping(false); // Cuando se envía el mensaje, el usuario no está escribiendo
     setIsAudioRecordingCancelled(false);
-    // setShowFunctionsContainer(true); 
+    // setShowFunctionsContainer(true);
   };
   
   const pasteImage = async () => {
@@ -970,7 +971,7 @@ const InputMessage = () => {
             <div className='secondContainer'>
               <FontAwesomeIcon 
                 icon={faCircleStop} 
-                className='stopAudioRecording' 
+                className={`stopAudioRecording ${isRecordingCompleted ? 'completed' : ''}`} 
                 onClick={stopAudioRecording} 
                 disabled={!isRecording}
               />  

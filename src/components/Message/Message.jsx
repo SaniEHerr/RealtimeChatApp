@@ -558,15 +558,15 @@ import { Icon } from '@iconify/react';
             )}
 
             {message.audio && (
-              <div className="custom-audio-player">
+              <div className="customAudioPlayer">
                 <audio ref={audioRef} src={message.audio} preload="metadata"></audio>
-                <div className="audio-speed-control">
+                <div className="audioSpeedControl">
                   <button onClick={togglePlaybackRate}>
                     {playbackRates[currentPlaybackRateIndex]}
                   </button>
                 </div>
                 <div
-                  className={`play-pause-button ${isPlaying ? "playing" : ""}`}
+                  className="playPauseButtonContainer"
                   onClick={togglePlayPause}
                 >
                   {isPlaying ? <Icon icon="ic:sharp-pause" width={34} /> : <Icon icon="bi:play-fill" width={34} />}
