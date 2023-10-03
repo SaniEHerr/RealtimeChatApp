@@ -82,6 +82,7 @@ function App() {
       console.error("Error al actualizar el estado en línea:", error);
     }
   };
+  
 
   // Aca utilizo useMemo; se utiliza para memorizar el resultado de una fn y volver a calcularlo solo cuando alguna de las dependencias especificadas cambie. En este caso, la dependencia es currentUser, lo que significa que este componente se recalcula solo cuando currentUser cambia.
   const ProtectedRoute = useMemo(() => ({ children }) => {
@@ -199,14 +200,6 @@ export default App
   //     console.error("Error al actualizar el estado en línea:", error);
   //   }
   // };
-
-  // const ProtectedRoute = ({children}) => {
-  //   if (!currentUser) {
-  //     return <Navigate to="login" />
-  //   }
-
-  //   return children
-  // }
 
   // const ProtectedRoute = ({children}) => {
   //   if (!currentUser) {
