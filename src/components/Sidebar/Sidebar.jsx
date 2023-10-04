@@ -2,12 +2,11 @@ import Navbar from '../Navbar/NavBar'
 import Search from '../Search/Search'
 import Chats from '../Chats/Chats'
 
-const Sidebar = ({ onSelectChat  }) => {
+const Sidebar = ({ onSelectChat }) => {
   return (
     <div className='sidebar'>
       <Navbar />
       <Search />
-      {/* <Chats /> */}
       <Chats onSelectChat={onSelectChat} />
     </div>
   )

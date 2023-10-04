@@ -11,64 +11,80 @@ const Register = () => {
   const [error, setError] = useState(false)
   const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const displayName = e.target[0].value;
-    const email = e.target[1].value;
-    const password = e.target[2].value;
-    const file = e.target[3].files[0];
-  
-    try {
-      // Create the user account
-      const res = await createUserWithEmailAndPassword(auth, email, password);
-      const storageRef = ref(storage, displayName);
-  
-      // Upload the file
-      const uploadTask = uploadBytesResumable(storageRef, file);
-  
-      uploadTask.on(
-        "state_changed",
-        null,
-        (uploadError) => {
-          console.error("Upload error:", uploadError);
-          setError(true);
-        },
-        async () => {
-          try {
-            const downloadURL = await getDownloadURL(storageRef);
-  
-            // Update user profile and set user data
-            await updateProfile(res.user, {
-              displayName,
-              photoURL: downloadURL,
-            });
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  const displayName = e.target[0].value;
+  const email = e.target[1].value;
+  const password = e.target[2].value;
+  const file = e.target[3].files[0];
 
-            await setDoc(doc(db, "users", res.user.uid), {
-              uid: res.user.uid,
-              displayName, 
-              email,
-              photoURL: downloadURL,
-              isOnline: true,
-              lastOnline: serverTimestamp()
-            });
-  
-            // Create empty user chats on Firestore
-            await setDoc(doc(db, "userChats", res.user.uid), {});
-  
-            // Navigation should only happen after all operations are complete
-            navigate("/");
+  try {
+    // Crear la cuenta de usuario
+    const res = await createUserWithEmailAndPassword(auth, email, password);
+    const storageRef = ref(storage, displayName);
 
-          } catch (firestoreError) {
-            console.error("Firestore error:", firestoreError);
-            setError(true);
-          }
+    // Subir el archivo
+    const uploadTask = uploadBytesResumable(storageRef, file);
+
+    uploadTask.on(
+      "state_changed",
+      null,
+      (uploadError) => {
+        console.error("Error de carga:", uploadError);
+        setError("Error al subir la imagen");
+      },
+      async () => {
+        try {
+          const downloadURL = await getDownloadURL(storageRef);
+
+          // Actualizar el perfil del usuario y establecer los datos del usuario
+          await updateProfile(res.user, {
+            displayName,
+            photoURL: downloadURL,
+          });
+
+          await setDoc(doc(db, "users", res.user.uid), {
+            uid: res.user.uid,
+            displayName,
+            email,
+            photoURL: downloadURL,
+            isOnline: true,
+            lastOnline: serverTimestamp(),
+          });
+
+          // Crear chats de usuario vacíos en Firestore
+          await setDoc(doc(db, "userChats", res.user.uid), {});
+
+          // La navegación solo debe ocurrir después de que se completen todas las operaciones
+          navigate("/");
+        } catch (firestoreError) {
+          console.error("Error de Firestore:", firestoreError);
+          setError("Error al actualizar los datos del usuario");
         }
-      );
-    } catch (authError) {
-      console.error("Authentication error:", authError);
-      setError(true);
+      }
+    );
+  } catch (authError) {
+    if (authError instanceof AuthError) {
+      // Manejar errores de autenticación específicos aquí
+      const errorCode = authError.code;
+      switch (errorCode) {
+        case "auth/email-already-in-use":
+          setError("El correo electrónico ya está en uso.");
+          break;
+        case "auth/weak-password":
+          setError("La contraseña es demasiado débil.");
+          break;
+        default:
+          setError("Ha ocurrido un error de autenticación.");
+          break;
+      }
+    } else {
+      console.error("Error de autenticación:", authError);
+      setError("Ha ocurrido un error de autenticación.");
     }
-  };
+  }
+};
+
 
   return (
     <div className='formContainer'>

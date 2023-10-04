@@ -13,7 +13,6 @@ const Home = () => {
           <div className="container">
             <Sidebar onSelectChat={setSelectedChat} />
             <Chat />
-            {/* {selectedChat && <Chat chat={selectedChat} />} */}
           </div>
         </div>
       </div>

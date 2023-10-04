@@ -19,14 +19,15 @@ import {
   getDocs
 } from "firebase/firestore";
 
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+
 function App() {
 
   const {currentUser} = useContext(AuthContext);
 
   // Rastreeo si el user esta en línea.
   const [isOnline, setIsOnline] = useState(false);
-  // Rastreeo la ultima vez que se detecto una actividad del user.
-  const [lastActivityTime, setLastActivityTime] = useState(null);
+  const auth = getAuth();
 
   // Representan 2 cosas:
   // El intervalo de verificacion de inactividad en ms.
@@ -38,6 +39,7 @@ function App() {
   useEffect(() => {
     // Almaceno una ref al temporizador de inactividad.
     let inactivityTimeout;
+    let beforeUnloadListener;
 
     // Fn que se ejecuta cada vez que se detecte una interaccion del user, como el movimiento del mouse.
     const handleUserInteraction = () => {
@@ -55,9 +57,16 @@ function App() {
       }, 60000); // 1 minuto en ms.
     };
 
+    const handleBeforeUnload = () => {
+      if (currentUser && isOnline) {
+        updateOnlineStatus(currentUser.uid, false);
+      }
+    };
+
     // Si hay un currenUser, agrego handleUserInteraction como un manejador de eventos para el movimiento del mouse en la ventana. O sea que cada vez que el user mueva el mouse, se llamara a handleUserInteraction, lo que actualizara el estado en linea y reiniciara el temporizador de inactividad.contrario.
     if (currentUser) {
       window.addEventListener("mousemove", handleUserInteraction);
+      beforeUnloadListener = window.addEventListener('beforeunload', handleBeforeUnload);
     }
 
     // Defino una fn de limpieza que se ejecuta cuando el componente se desmonte. 
@@ -65,11 +74,28 @@ function App() {
       if (currentUser) {
         // Elimino el manejador de eventos "mousemove" para evitar fugas de memoria.
         window.removeEventListener("mousemove", handleUserInteraction);
+        window.removeEventListener('beforeunload', handleBeforeUnload);
       }
       // Limpio el temporizador de inactividad para evitar cualquier ejecucion futura de la fn que cambia el estado en linea.
       clearTimeout(inactivityTimeout);
     };
   }, [currentUser, isOnline]);
+
+  useEffect(() => {
+    const authStateChangedListener = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        // El usuario está autenticado, establecer isOnline en true.
+        setIsOnline(true);
+        // También actualizamos el estado en línea en Firestore.
+        updateOnlineStatus(user.uid, true);
+      }
+    });
+  
+    return () => {
+      // Limpia el listener cuando el componente se desmonta.
+      authStateChangedListener();
+    };
+  }, [auth]);
 
   const updateOnlineStatus = async (userId, isOnline) => {
     try {
@@ -82,7 +108,6 @@ function App() {
       console.error("Error al actualizar el estado en línea:", error);
     }
   };
-  
 
   // Aca utilizo useMemo; se utiliza para memorizar el resultado de una fn y volver a calcularlo solo cuando alguna de las dependencias especificadas cambie. En este caso, la dependencia es currentUser, lo que significa que este componente se recalcula solo cuando currentUser cambia.
   const ProtectedRoute = useMemo(() => ({ children }) => {

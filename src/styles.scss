@@ -148,6 +148,10 @@
 
     .sidebar {
       background-color: #3e3c61;
+      transform: translateZ(0);
+      z-index: 101;
+      max-width: 480px;
+      min-width: 336.6px;
 
       @media screen and (min-width: 900px) {
         flex: 0 0 40%;
@@ -163,12 +167,6 @@
         flex: 0 0 30%;
         max-width: 30%;
       }
-
-      transform: translateZ(0);
-      z-index: 101;
-
-      max-width: 480px;
-      min-width: 336.6px;
 
       .navbar {
         display: flex;
